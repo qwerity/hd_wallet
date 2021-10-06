@@ -1,0 +1,23 @@
+{
+  "name": "hd_wallet",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "ksh",
+  "license": "ISC",
+  "dependencies": {
+    "bech32": "^2.0.0",
+    "bip-schnorr": "^0.6.3",
+    "ecurve": "^1.0.6",
+    "bip39": "^3.0.4",
+    "bitcoind-zmq": "^1.0.2",
+    "bitcoinjs-lib": "^5.2.0",
+    "bitcoin-core": "^3.0.0",
+    "dotenv": "^10.0.0",
+    "randomstring": "^1.2.1"
+  }
+}
