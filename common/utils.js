@@ -1,18 +1,14 @@
 require('dotenv').config()
-const BitcoinJsonRpc = require('../bitcoin-json-rpc').default;
+const Client = require("bitcoin-core");
 
-const url = process.env.RPC_PROTOCOL+'://'+process.env.RPC_USERNAME
-  +':'+process.env.RPC_PASSWORD
-  +'@'+process.env.RPC_HOST
-  +':'+process.env.RPC_REGTEST_PORT;
+let rpcConfig = {
+  host: process.env.BTC_RPC_HOST,
+  port: process.env.BTC_RPC_REGTEST_PORT,
+  username: process.env.BTC_RPC_USERNAME,
+  password: process.env.BTC_RPC_PASSWORD,
+  version: process.env.BTC_VERSION,
+}
 
 module.exports = {
-  bitcoind: new BitcoinJsonRpc(url),
-  bitcoindWallet: (walletName = null) => {
-    let urlWithWallet = url
-    if (!!walletName) {
-      urlWithWallet += '/wallet/' + walletName
-    }
-    return new BitcoinJsonRpc(urlWithWallet)
-  }
+  bitcoind: new Client(rpcConfig)
 }

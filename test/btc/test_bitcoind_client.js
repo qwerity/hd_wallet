@@ -16,8 +16,6 @@ const kshWalletPassphrase = "ksh"
 rpcConfig.wallet = "test_wallet"
 const testWallet = new Client(rpcConfig)
 
-// testWallet.getTransaction("4ae4cf31019d9918b255578bb1bf6bd96c2fe39d713e7ccb8a1df54663674c01", undefined, true).then((help) => console.log(help));
-
 const testAddress = "bcrt1qmd49w0qzrqaduk0q8x4va2cj8h87u0l3vwwh62";
 const kshAddress = "bcrt1qu86fwn59w7laz6glsyjadxrlmrg8rafjnl5kfh";
 
