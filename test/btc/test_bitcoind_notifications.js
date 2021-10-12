@@ -3,7 +3,6 @@ const bitcoin = require("bitcoinjs-lib");
 const {bitcoind} = require("../../common/utils");
 
 const btcd = new BitcoindZmq({
-  // topic: <zmq node>
   hashblock: 'tcp://127.0.0.1:3000',
   hashtx:    'tcp://127.0.0.1:3000',
   // rawblock:  'tcp://127.0.0.1:3001',
