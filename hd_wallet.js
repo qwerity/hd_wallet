@@ -5,7 +5,7 @@ const {
     P2WPKH, // we need to use P2WPKH purpose for BIP84 (Native SegWit bech32 P2WPKH) address generation
     NestedP2WPKH,
     P2TR
-} = require("../common/hd_address_util").bipPurpose
+} = require("./common/hd_address_util").bipPurpose
 
 //https://github.com/iancoleman/bip39/blob/c4f0c2908faab1452937e50a7d3a400fed42a0a8/src/js/bitcoinjs-extensions.js
 class HDWallet {
@@ -105,7 +105,7 @@ class HDWallet {
           .derive(isChange ? 1 : 0)          // 0 - external(receive), 1 - internal(change) address
           .derive(addressIndex);                   // address_index
 
-        const network = (this.network === null) ? (isTestnet ? purpose.network.regtest : purpose.network.main) : this.network
+        const network = (this.network === null) ? (isTestnet ? purpose.network.testnet : purpose.network.main) : this.network
 
         return {
             derivedKey,

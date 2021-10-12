@@ -1,11 +1,11 @@
 const bitcoin = require('bitcoinjs-lib')
-const {HDWallet} = require("../../btc/hd_wallet")
+const {HDWallet} = require("../hd_wallet")
 const {
   P2PKH,  // the standard(most used one) should use P2PKH purpose
   P2WPKH, // we need to use P2WPKH purpose for BIP84 (Native SegWit bech32 P2WPKH) address generation
   NestedP2WPKH,
   P2TR
-} = require("../../common/hd_address_util").bipPurpose
+} = require("../common/hd_address_util").bipPurpose
 
 
 /* Usage example

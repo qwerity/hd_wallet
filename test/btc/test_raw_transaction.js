@@ -1,5 +1,5 @@
 const bitcoin = require('bitcoinjs-lib')
-const HDWallet = require("../../btc/hd_wallet")
+const HDWallet = require("../../hd_wallet")
 const {P2WPKH} = require("../../common/hd_address_util").bipPurpose
 const {bitcoind, bitcoindWallet} = require("../../common/utils")
 
