@@ -10,6 +10,8 @@
   "author": "ksh",
   "license": "ISC",
   "dependencies": {
+    "dotenv": "^10.0.0",
+    "randomstring": "^1.2.1",
     "bech32": "^2.0.0",
     "bip-schnorr": "^0.6.3",
     "ecurve": "^1.0.6",
@@ -17,7 +19,6 @@
     "bitcoind-zmq": "^1.0.2",
     "bitcoinjs-lib": "^5.2.0",
     "bitcoin-core": "^3.0.0",
-    "dotenv": "^10.0.0",
-    "randomstring": "^1.2.1"
+    "tronweb": "^4.0.0"
   }
 }
