@@ -1,6 +1,6 @@
-const BitcoindZmq = require('bitcoind-zmq')
+const BitcoindZmq = require('bitcoind-zmq');
 const bitcoin = require("bitcoinjs-lib");
-const {bitcoind} = require("../../common/utils")
+const {bitcoind} = require("../../common/utils");
 
 const btcd = new BitcoindZmq({
   // topic: <zmq node>
@@ -8,8 +8,7 @@ const btcd = new BitcoindZmq({
   hashtx:    'tcp://127.0.0.1:3000',
   // rawblock:  'tcp://127.0.0.1:3001',
   // rawtx:     'tcp://127.0.0.1:3001'
-})
-
+});
 
 btcd.on('connect:*', (uri, type) => { console.log(`socket ${type} connected to ${uri}`) })
 btcd.on('retry:*', (type, attempt) => { console.log(`type: ${type}, retry attempt: ${attempt}`) })
@@ -39,12 +38,15 @@ btcd.on('hashblock', async (hash) => {
 })
 
 btcd.on('hashtx', async (hash) => {
-  console.log('hashtx')
+  const txid = hash.toString('hex')
+  console.log('hashtx:', txid)
+
   const tx = await bitcoind.getRawTransaction({
     txid: hash.toString('hex'),
     verbose: true
   })
-  console.log(tx)
+  // console.log(tx)
+
   let new_unspend_transactions = []
   tx.vout.forEach(out => {
     if (out.value > 0) {

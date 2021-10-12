@@ -1,15 +1,14 @@
-const BeincoindZmq = require('bitcoind-zmq')
+const BitcoindZmq = require('bitcoind-zmq');
 const bitcoin = require("bitcoinjs-lib");
-const {beincoind} = require("../../common/utils")
+const {beincoind} = require("../../common/utils");
 
-const bicd = new BeincoindZmq({
+const bicd = new BitcoindZmq({
   // topic: <zmq node>
   hashblock: 'tcp://127.0.0.1:3010',
   hashtx:    'tcp://127.0.0.1:3010',
   // rawblock:  'tcp://127.0.0.1:3001',
   // rawtx:     'tcp://127.0.0.1:3001'
-})
-
+});
 
 bicd.on('connect:*', (uri, type) => { console.log(`socket ${type} connected to ${uri}`) })
 bicd.on('retry:*', (type, attempt) => { console.log(`type: ${type}, retry attempt: ${attempt}`) })
@@ -17,17 +16,18 @@ bicd.on('error:*', (err, type) => { console.error(`${type} had error:`, err) })
 bicd.on('close:*', (err, type) => { console.log(`close ${type}`, err || '') })
 
 bicd.connect()
+
 bicd.on('hashblock', async (hash) => {
   console.log('hashblock')
   const blockhash = hash.toString("hex")
   const verbosity = true
   const block = await beincoind.getBlock(blockhash, verbosity)
+  console.log('block.confirmations:', block.confirmations)
 
   let new_unspend_transactions = []
   for (const txid of block.tx) {
     const tx = await beincoind.getRawTransaction(txid, verbosity, blockhash)
     tx.vout.forEach(out => {
-      console.log(out.scriptPubKey)
       if (out.value > 0) {
         const address = out.scriptPubKey.addresses[0]
         const valueInBIC = out.value
@@ -38,9 +38,23 @@ bicd.on('hashblock', async (hash) => {
   console.log(new_unspend_transactions)
 })
 
-bicd.on('hashtx', (hash) => {
-  // hash <Buffer ... />
-  console.log('hashtx:', hash.toString('hex'))
+bicd.on('hashtx', async(hash) => {
+  const txid = hash.toString('hex')
+  console.log('hashtx:', txid)
+
+  const verbose = true
+  const tx = await beincoind.getRawTransaction(txid, verbose)
+  // console.log(tx)
+
+  let new_unspend_transactions = []
+  tx.vout.forEach(out => {
+    if (out.value > 0) {
+      const address = out.scriptPubKey.addresses[0]
+      const valueInBTC = out.value
+      new_unspend_transactions.push({address, valueInBTC})
+    }
+  })
+  console.log(new_unspend_transactions)
 })
 
 bicd.on('rawblock', async (rawBlock) => {
