@@ -16,16 +16,14 @@ btcd.on('retry:*', (type, attempt) => { console.log(`type: ${type}, retry attemp
 btcd.on('error:*', (err, type) => { console.error(`${type} had error:`, err) })
 btcd.on('close:*', (err, type) => { console.log(`close ${type}`, err || '') })
 
-btcd.on('message', function(topic, message) {
-  console.log("topic", topic.toString())
-});
-
 btcd.connect()
+
 btcd.on('hashblock', async (hash) => {
   const block = await bitcoind.getBlock({
     blockhash: hash.toString("hex"),
     verbosity: 2     // returns an Object with information about block <hash> and information about each transaction.
   })
+  console.log('block.confirmations:', block.confirmations)
 
   let new_unspend_transactions = []
   block.tx.forEach(tx => {
@@ -40,9 +38,22 @@ btcd.on('hashblock', async (hash) => {
   console.log(new_unspend_transactions)
 })
 
-btcd.on('hashtx', (hash) => {
-  // hash <Buffer ... />
-  console.log(hash.toString('hex'))
+btcd.on('hashtx', async (hash) => {
+  console.log('hashtx')
+  const tx = await bitcoind.getRawTransaction({
+    txid: hash.toString('hex'),
+    verbose: true
+  })
+  console.log(tx)
+  let new_unspend_transactions = []
+  tx.vout.forEach(out => {
+    if (out.value > 0) {
+      const address = out.scriptPubKey.address
+      const valueInBTC = out.value
+      new_unspend_transactions.push({address, valueInBTC})
+    }
+  })
+  console.log(new_unspend_transactions)
 })
 
 btcd.on('rawblock', async (rawBlock) => {
