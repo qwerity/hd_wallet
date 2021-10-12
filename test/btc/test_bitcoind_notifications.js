@@ -1,6 +1,6 @@
 const BitcoindZmq = require('bitcoind-zmq')
 const bitcoin = require("bitcoinjs-lib");
-const {bitcoind} = require("../common/utils")
+const {bitcoind} = require("../../common/utils")
 
 const btcd = new BitcoindZmq({
   // topic: <zmq node>
@@ -27,22 +27,22 @@ btcd.on('hashblock', async (hash) => {
     verbosity: 2     // returns an Object with information about block <hash> and information about each transaction.
   })
 
-  let new_balance = []
+  let new_unspend_transactions = []
   block.tx.forEach(tx => {
     tx.vout.forEach(out => {
       if (out.value > 0) {
         const address = out.scriptPubKey.address
         const valueInBTC = out.value
-        new_balance.push({address, valueInBTC})
+        new_unspend_transactions.push({address, valueInBTC})
       }
     })
   })
-  console.log(new_balance)
+  console.log(new_unspend_transactions)
 })
 
 btcd.on('hashtx', (hash) => {
   // hash <Buffer ... />
-  // console.log(hash)
+  console.log(hash.toString('hex'))
 })
 
 btcd.on('rawblock', async (rawBlock) => {
